@@ -14,7 +14,7 @@ vm_quarantine = args[3]
 with open(conf_file, "r") as file:
     conf = file.read()
     conf = json.loads(conf)
-prism_addr = conf["prism_address"]
+prism_addr = conf["prism_central_address"]
 prism_user = conf["user_name"]
 prism_pass = conf["password"]
 
