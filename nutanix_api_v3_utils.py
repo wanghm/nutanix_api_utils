@@ -23,6 +23,7 @@ class Nutanix_restapi_mini_sdk():
         self.s.auth = (self.username, self.password)
         self.s.headers.update({'Content-Type': 'application/json; charset=utf-8'})
 
+    ############### VM related SDKs ###############
     def get_vm_uuid_by_name(self, vm_name):
         api_url = self.base_url + '/vms/list'
         payload = {
@@ -37,7 +38,7 @@ class Nutanix_restapi_mini_sdk():
         for vm in vms_spec['entities']:
            if vm['metadata']: #sometimes this value will be '{}' 
                 vm_uuid = vm['metadata']['uuid']
-                exit #return the 1st one
+                break #return the 1st one
         return vm_uuid
     
     def get_vm_uuid_by_ip_address(self, ip_address):
@@ -56,7 +57,7 @@ class Nutanix_restapi_mini_sdk():
         for vm in vms_spec['entities']:
            if vm['metadata']: #sometimes this value will be '{}' 
                 vm_uuid = vm['metadata']['uuid']
-                exit #return the 1st one
+                break #return the 1st one
         return vm_uuid
 
     def get_vm_spec(self, vm_uuid):
@@ -98,3 +99,68 @@ class Nutanix_restapi_mini_sdk():
 
         task = self.update_vm(vm_uuid, vm_spec)
         return task
+
+    ############### Calm BP related SDKs ###############
+    def get_bp_uuid(self, target_bp_name):
+        #Get BP's UUID by BP name
+        #precondition: BP name is uniq
+        api_url = self.base_url + "/blueprints/list"
+        payload_dict = {
+            "kind":"blueprint"
+        }
+
+        payload_json = json.dumps(payload_dict)
+        response = self.s.post(api_url, payload_json, verify=False)
+        #print(response.text)
+
+        d = json.loads(response.text)
+        #print(json.dumps(d, indent=2))
+        bps = d["entities"]
+        for bp in bps:
+            bp_name = bp["status"]["name"]
+            bp_uuid = bp["status"]["uuid"]
+            print(bp_name + ", " + bp_uuid)
+            if (bp_name == target_bp_name):
+                break
+        return bp_uuid
+            
+    def get_app_profile_uuid(self, bp_uuid):
+        #Get UUID of app profile by BP UUID
+        api_url = self.base_url + "/blueprints/" + bp_uuid + "/runtime_editables"
+        response = self.s.get(api_url, verify=False)
+        
+        if not response.ok:
+            print(response.text)
+            exit(1)
+
+        d = json.loads(response.text)
+        #print(json.dumps(d, indent=2))
+        resources = d["resources"]
+        for resource in resources:
+            app_profile_uuid=  resource["app_profile_reference"]["uuid"]
+            print("app_profile_uuid= " + app_profile_uuid)
+            break
+        return app_profile_uuid
+
+
+    def launch_bp(self, app_name, bp_uuid, app_profile_uuid):
+        #Launch BP
+        api_url = self.base_url + "/blueprints/" + bp_uuid + "/simple_launch"
+        payload_dict = {
+            "spec": {
+                "app_name": app_name,
+                "app_description": "Calm application launched via Nutanix Calm REST API",
+                "app_profile_reference": {
+                    "kind": "app_profile",
+                    "name": "Default",
+                    "uuid": app_profile_uuid
+                }
+            }
+        }
+
+        payload_json = json.dumps(payload_dict)
+        response = self.s.post(api_url, payload_json, verify=False)
+        print(response.text)
+
+        return
+    
