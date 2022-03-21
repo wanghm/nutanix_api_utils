@@ -1,4 +1,4 @@
-# nutanix restapi v3 wrapper
+# nutanix restapi v3 utility class (mini SDK)
 
 ## Nutanix Rest API Versions and Base URL
 
@@ -15,7 +15,8 @@
 * Python3, requests   
 `pip install requests`
 
-## config file: auth.json
+## Usage
+### config file: auth.json
 
 ```
 {
@@ -24,3 +25,12 @@
     "password": "xxxxxxxxx"
 }
 ```
+
+### import this class
+`from nutanix_api_v3_utils import Nutanix_restapi_mini_sdk`
+
+### Run the test code
+
+ `python test_nutanix_api_v3_utils_vm.py ./auth.json`   
+
+ `python test_nutanix_api_v3_utils_calm.py ./auth.json`
