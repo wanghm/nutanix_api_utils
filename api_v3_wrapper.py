@@ -74,7 +74,6 @@ class Nutanix_restapi_v3_wrapper():
         api_url = self.base_url + '/vms/' + vm_uuid
         task = self.s.delete(api_url, verify=False).json() 
         return task
-        return
 
     def restore_vm(self, vm_uuid, unix_timestamp):
         #todo
