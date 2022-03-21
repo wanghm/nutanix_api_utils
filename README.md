@@ -14,9 +14,3 @@ Python3, requests
     "password": "xxxxxxxxx"
 }
 ```
-
-## Quarantine a VM (set category)
-
-`python test_api_v3_quarantine.py ./auth.json <VM UUID> on`
-
-`python test_api_v3_quarantine.py ./auth.json <VM UUID> off`
