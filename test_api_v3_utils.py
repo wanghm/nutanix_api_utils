@@ -8,7 +8,7 @@
 import sys
 import time
 import json
-from api_v3_wrapper import Nutanix_restapi_v3_wrapper
+from nutanix_api_v3_utils import Nutanix_restapi_mini_sdk
 
 def test_quarantine(nutanix_api_v3, vm_uuid):
     nutanix_api_v3.quarantine_vm(vm_uuid)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     prism_pass = conf["password"]
     
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
-    nutanix_api_v3 = Nutanix_restapi_v3_wrapper(prism_user, prism_pass, base_url)
+    nutanix_api_v3 = Nutanix_restapi_mini_sdk(prism_user, prism_pass, base_url)
 
     #test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
 

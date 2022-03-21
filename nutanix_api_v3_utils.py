@@ -11,7 +11,7 @@ import json
 import requests
 import urllib3
 
-class Nutanix_restapi_v3_wrapper():
+class Nutanix_restapi_mini_sdk():
     def __init__(self, username, password, base_url):
         self.username = username
         self.password = password
