@@ -158,9 +158,9 @@ class Nutanix_restapi_mini_sdk():
             }
         }
 
-        payload_json = json.dumps(payload_dict)
-        response = self.s.post(api_url, payload_json, verify=False)
+        response = self.s.post(api_url, json.dumps(payload_dict), verify=False)
         print(response.text)
 
-        return
+        return response.json()
+
     
