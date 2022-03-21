@@ -11,10 +11,10 @@ import json
 from api_v3_wrapper import Nutanix_restapi_v3_wrapper
 
 def test_quarantine(nutanix_api_v3, vm_uuid):
-    nutanix_api_v3.quarantine(vm_uuid)
+    nutanix_api_v3.quarantine_vm(vm_uuid)
     
 def test_unquarantine(nutanix_api_v3, vm_uuid):
-    nutanix_api_v3.unquarantine(vm_uuid)
+    nutanix_api_v3.unquarantine_vm(vm_uuid)
 
 def test_get_vm_uuid_by_ip_address(nutanix_api_v3, ip_address):
     vm_uuid = nutanix_api_v3.get_vm_uuid_by_ip_address(ip_address)
@@ -46,30 +46,31 @@ if __name__ == '__main__':
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
     nutanix_api_v3 = Nutanix_restapi_v3_wrapper(prism_user, prism_pass, base_url)
 
-    test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
+    #test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
 
-"""
+    #"""
     #test quarantine
     print("test quarantine: ###############################")
     vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"move")
     test_quarantine(nutanix_api_v3, vm_uuid)
 
     time.sleep(5)
+
+    #test unquarantine
+    print("test unquarantine: ###############################")
+    test_unquarantine(nutanix_api_v3, vm_uuid)
+
+    time.sleep(5)
     
+    #test unquarantine
     vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
+    print("test quarantine: ###############################")
     test_quarantine(nutanix_api_v3, vm_uuid)
 
     time.sleep(5)
 
-    #test unquarantine
     print("test unquarantine: ###############################")
-    vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"move")
     test_unquarantine(nutanix_api_v3, vm_uuid)
 
-    time.sleep(5)
-    
-    vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
-    test_unquarantine(nutanix_api_v3, vm_uuid)
-
-"""
+    #"""
 

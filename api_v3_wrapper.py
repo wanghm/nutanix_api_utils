@@ -79,7 +79,7 @@ class Nutanix_restapi_v3_wrapper():
         #todo
         return
     
-    def quarantine(self, vm_uuid):
+    def quarantine_vm(self, vm_uuid):
         vm_spec = self.get_vm_spec(vm_uuid)
         vm_spec['metadata']['categories']['Quarantine'] = 'Default'
         #vm_spec['metadata']['categories']['Quarantine'] = 'Strict'
@@ -90,7 +90,7 @@ class Nutanix_restapi_v3_wrapper():
         task = self.update_vm(vm_uuid, vm_spec)
         return task
 
-    def unquarantine(self, vm_uuid):
+    def unquarantine_vm(self, vm_uuid):
         vm_spec = self.get_vm_spec(vm_uuid)
         del vm_spec['metadata']['categories']['Quarantine']
         del vm_spec['metadata']['last_update_time']
