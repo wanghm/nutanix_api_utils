@@ -30,6 +30,9 @@ class Nutanix_restapi_v3_wrapper():
             "kind": "vm"
         }
         vms_spec = self.s.post(api_url, json.dumps(payload), verify=False).json()
+        print ("vms_spec ------")
+        print (vms_spec)
+
         vm_uuid = ''
         for vm in vms_spec['entities']:
            if vm['metadata']: #sometimes this value will be '{}' 
