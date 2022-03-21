@@ -26,6 +26,12 @@ def test_get_vm_uuid_by_name(nutanix_api_v3, vm_name):
     print("vm_uuid: " + vm_uuid)
     return vm_uuid
 
+def test_delete_vm(nutanix_api_v3, vm_uuid):
+    task = nutanix_api_v3.delete_vm(vm_uuid)
+    print("response:")
+    print(task)
+    return task
+    
 if __name__ == '__main__':
     args = sys.argv
     conf_file = args[1]
@@ -40,6 +46,9 @@ if __name__ == '__main__':
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
     nutanix_api_v3 = Nutanix_restapi_v3_wrapper(prism_user, prism_pass, base_url)
 
+    test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
+
+"""
     #test quarantine
     print("test quarantine: ###############################")
     vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"move")
@@ -61,3 +70,6 @@ if __name__ == '__main__':
     
     vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
     test_unquarantine(nutanix_api_v3, vm_uuid)
+
+"""
+
