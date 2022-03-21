@@ -1,7 +1,7 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 """
-  A sample wrapper script of Nutanix Rest API v3
+  Utility class (mini SDK) of Nutanix Rest API v3
   (Work In Process)
   requirements: python 3.x, requsts
 """
