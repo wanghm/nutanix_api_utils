@@ -9,6 +9,7 @@
 import sys
 import time
 import json
+import slackweb
 from nutanix_api_v3_utils import Nutanix_restapi_mini_sdk
 
 def get_infected_vm_ips():
@@ -26,10 +27,13 @@ if __name__ == '__main__':
     prism_addr = conf["prism_central_address"]
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
-    
+    slack_webhook_url = conf["slack_webhook_url"]
+
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
     nutanix_api_v3 = Nutanix_restapi_mini_sdk(prism_user, prism_pass, base_url)
 
+    slack = slackweb.Slack(url=slack_webhook_url)
+    
     # Get (virus)infected VM IPs
     vm_ips = get_infected_vm_ips()
     
@@ -39,6 +43,7 @@ if __name__ == '__main__':
             print("infected VM:" + vm_ip)
             vm_uuid = nutanix_api_v3.get_vm_uuid_by_ip_address(vm_ip)
             nutanix_api_v3.quarantine_vm(vm_uuid)
+            
+            slack.notify(text="infected VM:" + vm_ip + " has been qurantined.")
     else:
         print("no incidents")
-  
