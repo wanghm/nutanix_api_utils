@@ -10,12 +10,6 @@ import time
 import json
 from nutanix_api_v3_utils import Nutanix_restapi_mini_sdk
 
-def test_quarantine(nutanix_api_v3, vm_uuid):
-    nutanix_api_v3.quarantine_vm(vm_uuid)
-    
-def test_unquarantine(nutanix_api_v3, vm_uuid):
-    nutanix_api_v3.unquarantine_vm(vm_uuid)
-
 def test_get_vm_uuid_by_ip_address(nutanix_api_v3, ip_address):
     vm_uuid = nutanix_api_v3.get_vm_uuid_by_ip_address(ip_address)
     print("vm_uuid: " + vm_uuid)
@@ -48,29 +42,28 @@ if __name__ == '__main__':
 
     #test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
 
-    #"""
-    #test quarantine
+    #test quarantine by vm name
     print("test quarantine: ###############################")
-    vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"move")
-    test_quarantine(nutanix_api_v3, vm_uuid)
+    vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"hm-FILER")
+
+    nutanix_api_v3.quarantine_vm(vm_uuid, "Forensics")
 
     time.sleep(5)
 
     #test unquarantine
     print("test unquarantine: ###############################")
-    test_unquarantine(nutanix_api_v3, vm_uuid)
+    nutanix_api_v3.unquarantine_vm(vm_uuid)
 
     time.sleep(5)
     
-    #test unquarantine
+    #test quarantine by IP address
     vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
     print("test quarantine: ###############################")
-    test_quarantine(nutanix_api_v3, vm_uuid)
+    nutanix_api_v3.quarantine_vm(vm_uuid, "Default")
 
     time.sleep(5)
 
+    #test unquarantine
     print("test unquarantine: ###############################")
-    test_unquarantine(nutanix_api_v3, vm_uuid)
-
-    #"""
+    nutanix_api_v3.unquarantine_vm(vm_uuid)
 

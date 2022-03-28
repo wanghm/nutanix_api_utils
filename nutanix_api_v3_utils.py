@@ -32,7 +32,7 @@ class Nutanix_restapi_mini_sdk():
         }
         vms_spec = self.s.post(api_url, json.dumps(payload), verify=False).json()
         print ("vms_spec ------")
-        print (vms_spec)
+        print(json.dumps(vms_spec, indent=2))
 
         vm_uuid = ''
         for vm in vms_spec['entities']:
@@ -51,7 +51,7 @@ class Nutanix_restapi_mini_sdk():
         #vms_spec = self.post(api_url, json.dumps(payload)).json()
         vms_spec = self.s.post(api_url, data=json.dumps(payload), verify=False).json()
         print ("vms_spec ------")
-        print (vms_spec)
+        print(json.dumps(vms_spec, indent=2))
         
         vm_uuid = ''
         for vm in vms_spec['entities']:
@@ -64,6 +64,8 @@ class Nutanix_restapi_mini_sdk():
         api_url = self.base_url + '/vms/' + vm_uuid
         vm_spec = self.s.get(api_url, verify=False).json()
         del vm_spec['status']
+        print(json.dumps(vm_spec, indent=2))
+
         return vm_spec
 
     def update_vm(self, vm_uuid, vm_spec_json):
@@ -80,9 +82,13 @@ class Nutanix_restapi_mini_sdk():
         #todo
         return
     
-    def quarantine_vm(self, vm_uuid):
+    def quarantine_vm(self, vm_uuid, quarantine_method):
         vm_spec = self.get_vm_spec(vm_uuid)
-        vm_spec['metadata']['categories']['Quarantine'] = 'Default'
+        if quarantine_method not in ["Default", "Strict", "Forensics"]:
+            raise Exception("Quarantine Method:" + quarantine_method + " is not valid. Valid values: Strict, Forensics")
+        vm_spec['metadata']['categories']['Quarantine'] = quarantine_method
+
+        #vm_spec['metadata']['categories']['Quarantine'] = 'Default'
         #vm_spec['metadata']['categories']['Quarantine'] = 'Strict'
         #vm_spec['metadata']['categories']['Quarantine'] = 'Forensics'
         del vm_spec['metadata']['last_update_time']
