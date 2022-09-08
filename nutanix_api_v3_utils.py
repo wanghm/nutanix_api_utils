@@ -52,7 +52,6 @@ class Nutanix_restapi_mini_sdk(object):
         api_url = self.base_url + '/vms/' + vm_uuid
         vm_spec = self.s.get(api_url, verify=False).json()
         del vm_spec['status']
-        print(type(vm_spec))
         #print(json.dumps(vm_spec, indent=2))
 
         return vm_spec
