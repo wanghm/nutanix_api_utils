@@ -1,11 +1,9 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-"""
-  (1) Get (virus)infected VMs from security center (by API)
-  (2) Retieve VM UUID
-  (3) Qurantine the VMs
-"""
 
+# (1) Get (virus)infected VMs from security center (by API)
+# (2) Retieve VM UUID
+# (3) Qurantine the VMs
 import sys
 import time
 import json
@@ -21,9 +19,8 @@ if __name__ == '__main__':
     args = sys.argv
     conf_file = args[1]
 
-    with open(conf_file, "r") as file:
-        conf = file.read()
-        conf = json.loads(conf)
+    with open(conf_file, "r") as f:
+        conf = json.load(f)
     prism_addr = conf["prism_central_address"]
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
