@@ -1,17 +1,15 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-"""
-  Utility class (mini SDK) of Nutanix Rest API v3
-  (Work In Process)
-  requirements: python 3.x, requsts
-"""
 
+"""Utility class (mini SDK) of Nutanix Rest API v3
+#  (Work In Process)
+#  requirements: python 3.x, requsts
+"""
 import sys
 import json
 import requests
 import urllib3
-
-class Nutanix_restapi_mini_sdk():
+class Nutanix_restapi_mini_sdk(object):
     def __init__(self, username, password, base_url):
         self.username = username
         self.password = password
@@ -50,8 +48,8 @@ class Nutanix_restapi_mini_sdk():
         }
         #vms_spec = self.post(api_url, json.dumps(payload)).json()
         vms_spec = self.s.post(api_url, data=json.dumps(payload), verify=False).json()
-        print ("vms_spec ------")
-        print(json.dumps(vms_spec, indent=2))
+        #print ("vms_spec ------")
+        #print(json.dumps(vms_spec, indent=2))
         
         vm_uuid = ''
         for vm in vms_spec['entities']:
@@ -64,7 +62,8 @@ class Nutanix_restapi_mini_sdk():
         api_url = self.base_url + '/vms/' + vm_uuid
         vm_spec = self.s.get(api_url, verify=False).json()
         del vm_spec['status']
-        print(json.dumps(vm_spec, indent=2))
+        print(type(vm_spec))
+        #print(json.dumps(vm_spec, indent=2))
 
         return vm_spec
 
@@ -105,6 +104,29 @@ class Nutanix_restapi_mini_sdk():
 
         task = self.update_vm(vm_uuid, vm_spec)
         return task
+
+    def mount_ngt_vm(self, vm_name):
+        vm_uuid = self.get_vm_uuid_by_name(vm_name)
+        print("vm_uuid: " + vm_uuid)
+        vm_spec = self.get_vm_spec(vm_uuid)
+        
+        ngt_spec = {
+                    "nutanix_guest_tools": {
+                        "ngt_state": "UNINSTALLED",
+                        "iso_mount_state": "MOUNTED",
+                        "state": "ENABLED",
+                        "enabled_capability_list": []
+                    }
+        }
+        
+        vm_spec["spec"]["resources"]["guest_tools"] = ngt_spec
+                
+        print(vm_spec)
+
+        task = self.update_vm(vm_uuid, vm_spec)
+        print("**************************")
+        print(task)
+        return
 
     ############### Calm BP related SDKs ###############
     def get_bp_uuid(self, target_bp_name):

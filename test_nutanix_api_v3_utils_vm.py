@@ -25,6 +25,11 @@ def test_delete_vm(nutanix_api_v3, vm_uuid):
     print("response:")
     print(task)
     return task
+
+def test_mount_ngt(nutanix_api_v3, vm_name):
+    task = nutanix_api_v3.mount_ngt_vm(vm_name)
+    print(task)
+    return
     
 if __name__ == '__main__':
     args = sys.argv
@@ -40,12 +45,27 @@ if __name__ == '__main__':
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
     nutanix_api_v3 = Nutanix_restapi_mini_sdk(prism_user, prism_pass, base_url)
 
+    test_mount_ngt (nutanix_api_v3, "RHEL84-IP63")
+    
+
     #test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
 
     #test quarantine by vm name
-    print("test quarantine: ###############################")
-    vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"hm-FILER")
+    #print("test quarantine: ###############################")
+    #vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"hm-FILER")
 
+#    nutanix_api_v3.quarantine_vm(vm_uuid, "Forensics")
+#    time.sleep(5)
+    #test unquarantine
+    #print("test unquarantine: ###############################")
+    #nutanix_api_v3.unquarantine_vm(vm_uuid)
+
+"""
+    time.sleep(5)
+    
+    #test quarantine by IP address
+    vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
+    print("test quarantine: ###############################")
     nutanix_api_v3.quarantine_vm(vm_uuid, "Forensics")
 
     time.sleep(5)
@@ -54,16 +74,4 @@ if __name__ == '__main__':
     print("test unquarantine: ###############################")
     nutanix_api_v3.unquarantine_vm(vm_uuid)
 
-    time.sleep(5)
-    
-    #test quarantine by IP address
-    vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
-    print("test quarantine: ###############################")
-    nutanix_api_v3.quarantine_vm(vm_uuid, "Default")
-
-    time.sleep(5)
-
-    #test unquarantine
-    print("test unquarantine: ###############################")
-    nutanix_api_v3.unquarantine_vm(vm_uuid)
-
+"""
