@@ -11,23 +11,18 @@ import requests
 import urllib3
 class Nutanix_restapi_mini_sdk(object):
     def __init__(self, username, password, base_url):
-        self.username = username
-        self.password = password
+
         self.base_url = base_url
 
         urllib3.disable_warnings()
 
         self.s = requests.Session()
-        self.s.auth = (self.username, self.password)
+        self.s.auth = (username, password)
         self.s.headers.update({'Content-Type': 'application/json; charset=utf-8'})
 
     ############### VM related SDKs ###############
-    def get_vm_uuid_by_name(self, vm_name):
+    def get_vm_uuid(self, payload):
         api_url = self.base_url + '/vms/list'
-        payload = {
-            "filter": "vm_name==.*" + vm_name + ".*",
-            "kind": "vm"
-        }
         vms_spec = self.s.post(api_url, json.dumps(payload), verify=False).json()
         print ("vms_spec ------")
         print(json.dumps(vms_spec, indent=2))
@@ -39,24 +34,19 @@ class Nutanix_restapi_mini_sdk(object):
                 break #return the 1st one
         return vm_uuid
     
+    def get_vm_uuid_by_name(self, vm_name):
+        payload = {
+            "filter": "vm_name==.*" + vm_name + ".*",
+            "kind": "vm"
+        }
+        return self.get_vm_uuid(payload)
+    
     def get_vm_uuid_by_ip_address(self, ip_address):
-        # only one or zero VM will bematched 
-        api_url = self.base_url + '/vms/list'
         payload = {
             "filter": "ip_addresses==" + ip_address,
             "kind": "vm"
         }
-        #vms_spec = self.post(api_url, json.dumps(payload)).json()
-        vms_spec = self.s.post(api_url, data=json.dumps(payload), verify=False).json()
-        #print ("vms_spec ------")
-        #print(json.dumps(vms_spec, indent=2))
-        
-        vm_uuid = ''
-        for vm in vms_spec['entities']:
-           if vm['metadata']: #sometimes this value will be '{}' 
-                vm_uuid = vm['metadata']['uuid']
-                break #return the 1st one
-        return vm_uuid
+        return self.get_vm_uuid(payload)
 
     def get_vm_spec(self, vm_uuid):
         api_url = self.base_url + '/vms/' + vm_uuid

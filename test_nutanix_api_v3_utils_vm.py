@@ -34,9 +34,9 @@ if __name__ == '__main__':
     args = sys.argv
     conf_file = args[1]
 
-    with open(conf_file, "r") as file:
-        conf = file.read()
-        conf = json.loads(conf)
+    with open(conf_file, "r") as f:
+        conf = json.load(f)
+        
     prism_addr = conf["prism_central_address"]
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
@@ -44,33 +44,8 @@ if __name__ == '__main__':
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
     nutanix_api_v3 = Nutanix_restapi_mini_sdk(prism_user, prism_pass, base_url)
 
-    test_mount_ngt (nutanix_api_v3, "RHEL84-IP63")
+    test_mount_ngt (nutanix_api_v3, "DevWorkstation-2424")
     
-
     #test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
-
-    #test quarantine by vm name
-    #print("test quarantine: ###############################")
     #vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"hm-FILER")
-
-#    nutanix_api_v3.quarantine_vm(vm_uuid, "Forensics")
-#    time.sleep(5)
-    #test unquarantine
-    #print("test unquarantine: ###############################")
     #nutanix_api_v3.unquarantine_vm(vm_uuid)
-
-"""
-    time.sleep(5)
-    
-    #test quarantine by IP address
-    vm_uuid = test_get_vm_uuid_by_ip_address(nutanix_api_v3, "10.129.40.248")
-    print("test quarantine: ###############################")
-    nutanix_api_v3.quarantine_vm(vm_uuid, "Forensics")
-
-    time.sleep(5)
-
-    #test unquarantine
-    print("test unquarantine: ###############################")
-    nutanix_api_v3.unquarantine_vm(vm_uuid)
-
-"""
