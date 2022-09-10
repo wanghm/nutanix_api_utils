@@ -5,11 +5,12 @@
 #  (Work In Process)
 #  requirements: python 3.x, requsts
 """
-import sys
 import json
 import requests
 import urllib3
-class Nutanix_restapi_mini_sdk(object):
+
+
+class Nutanix_restapi_mini_sdk:
     def __init__(self, username, password, base_url):
 
         self.base_url = base_url
@@ -20,27 +21,27 @@ class Nutanix_restapi_mini_sdk(object):
         self.s.auth = (username, password)
         self.s.headers.update({'Content-Type': 'application/json; charset=utf-8'})
 
-    ############### VM related SDKs ###############
+# region VM related SDKs
     def get_vm_uuid(self, payload):
         api_url = self.base_url + '/vms/list'
         vms_spec = self.s.post(api_url, json.dumps(payload), verify=False).json()
-        print ("vms_spec ------")
+        print("vms_spec ------")
         print(json.dumps(vms_spec, indent=2))
 
         vm_uuid = ''
         for vm in vms_spec['entities']:
-           if vm['metadata']: #sometimes this value will be '{}' 
+            if vm['metadata']:  # sometimes this value will be '{}'
                 vm_uuid = vm['metadata']['uuid']
-                break #return the 1st one
+                break  # return the 1st one
         return vm_uuid
-    
+
     def get_vm_uuid_by_name(self, vm_name):
         payload = {
             "filter": "vm_name==.*" + vm_name + ".*",
             "kind": "vm"
         }
         return self.get_vm_uuid(payload)
-    
+
     def get_vm_uuid_by_ip_address(self, ip_address):
         payload = {
             "filter": "ip_addresses==" + ip_address,
@@ -52,33 +53,35 @@ class Nutanix_restapi_mini_sdk(object):
         api_url = self.base_url + '/vms/' + vm_uuid
         vm_spec = self.s.get(api_url, verify=False).json()
         del vm_spec['status']
-        #print(json.dumps(vm_spec, indent=2))
+        # print(json.dumps(vm_spec, indent=2))
 
         return vm_spec
 
     def update_vm(self, vm_uuid, vm_spec_json):
         api_url = self.base_url + '/vms/' + vm_uuid
-        task = self.s.put(api_url, data=json.dumps(vm_spec_json), verify=False).json() 
+        task = self.s.put(api_url, data=json.dumps(vm_spec_json), verify=False).json()
         return task
 
     def delete_vm(self, vm_uuid):
         api_url = self.base_url + '/vms/' + vm_uuid
-        task = self.s.delete(api_url, verify=False).json() 
+        task = self.s.delete(api_url, verify=False).json()
         return task
 
     def restore_vm(self, vm_uuid, unix_timestamp):
-        #todo
+        # todo
         return
-    
+
     def quarantine_vm(self, vm_uuid, quarantine_method):
         vm_spec = self.get_vm_spec(vm_uuid)
         if quarantine_method not in ["Default", "Strict", "Forensics"]:
-            raise Exception("Quarantine Method:" + quarantine_method + " is not valid. Valid values: Strict, Forensics")
+            raise Exception("Quarantine Method:" +
+                            quarantine_method +
+                            " is not valid. Valid values: Strict, Forensics")
         vm_spec['metadata']['categories']['Quarantine'] = quarantine_method
 
-        #vm_spec['metadata']['categories']['Quarantine'] = 'Default'
-        #vm_spec['metadata']['categories']['Quarantine'] = 'Strict'
-        #vm_spec['metadata']['categories']['Quarantine'] = 'Forensics'
+        # vm_spec['metadata']['categories']['Quarantine'] = 'Default'
+        # vm_spec['metadata']['categories']['Quarantine'] = 'Strict'
+        # vm_spec['metadata']['categories']['Quarantine'] = 'Forensics'
         del vm_spec['metadata']['last_update_time']
         print(json.dumps(vm_spec, indent=2))
 
@@ -98,7 +101,7 @@ class Nutanix_restapi_mini_sdk(object):
         vm_uuid = self.get_vm_uuid_by_name(vm_name)
         print("vm_uuid: " + vm_uuid)
         vm_spec = self.get_vm_spec(vm_uuid)
-        
+
         ngt_spec = {
                     "nutanix_guest_tools": {
                         "ngt_state": "UNINSTALLED",
@@ -107,31 +110,32 @@ class Nutanix_restapi_mini_sdk(object):
                         "enabled_capability_list": []
                     }
         }
-        
+
         vm_spec["spec"]["resources"]["guest_tools"] = ngt_spec
-                
+
         print(vm_spec)
 
         task = self.update_vm(vm_uuid, vm_spec)
         print("**************************")
         print(task)
         return
+# endregion
 
-    ############### Calm BP related SDKs ###############
+# region Calm BP related SDKs
     def get_bp_uuid(self, target_bp_name):
-        #Get BP's UUID by BP name
-        #precondition: BP name is uniq
+        # Get BP's UUID by BP name
+        # precondition: BP name is uniq
         api_url = self.base_url + "/blueprints/list"
         payload_dict = {
-            "kind":"blueprint"
+            "kind": "blueprint"
         }
 
         payload_json = json.dumps(payload_dict)
         response = self.s.post(api_url, payload_json, verify=False)
-        #print(response.text)
+        # print(response.text)
 
         d = json.loads(response.text)
-        #print(json.dumps(d, indent=2))
+        # print(json.dumps(d, indent=2))
         bps = d["entities"]
         for bp in bps:
             bp_name = bp["status"]["name"]
@@ -140,28 +144,27 @@ class Nutanix_restapi_mini_sdk(object):
             if (bp_name == target_bp_name):
                 break
         return bp_uuid
-            
+
     def get_app_profile_uuid(self, bp_uuid):
-        #Get UUID of app profile by BP UUID
+        # Get UUID of app profile by BP UUID
         api_url = self.base_url + "/blueprints/" + bp_uuid + "/runtime_editables"
         response = self.s.get(api_url, verify=False)
-        
+
         if not response.ok:
             print(response.text)
             exit(1)
 
         d = json.loads(response.text)
-        #print(json.dumps(d, indent=2))
+        # print(json.dumps(d, indent=2))
         resources = d["resources"]
         for resource in resources:
-            app_profile_uuid=  resource["app_profile_reference"]["uuid"]
+            app_profile_uuid = resource["app_profile_reference"]["uuid"]
             print("app_profile_uuid= " + app_profile_uuid)
             break
         return app_profile_uuid
 
-
     def launch_bp(self, app_name, bp_uuid, app_profile_uuid):
-        #Launch BP
+        # Launch BP
         api_url = self.base_url + "/blueprints/" + bp_uuid + "/simple_launch"
         payload_dict = {
             "spec": {
@@ -179,5 +182,4 @@ class Nutanix_restapi_mini_sdk(object):
         print(response.text)
 
         return response.json()
-
-    
+# endregion
