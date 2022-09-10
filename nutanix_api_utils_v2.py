@@ -5,15 +5,15 @@
 (Work In Process)
 requirements: python 3.x, requsts
 """
-# import json
+import json
 import requests
 import urllib3
 
 
 # Utils class of API v2
 class NutanixRestapiUtils:
-    def __init__(self, username, password, base_url):
-        self.base_url = base_url
+    def __init__(self, username, password, prism_addr):
+        self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v2.0'
         urllib3.disable_warnings()
 
         self.s = requests.Session()
@@ -21,17 +21,74 @@ class NutanixRestapiUtils:
         self.s.headers.update(
             {'Content-Type': 'application/json; charset=utf-8'})
 
-    def activate_pd(self, payload):
+    def activate_pd(self, pd_name):
         """Activate protection domain (Unplanned failover)
 
         Args:
-            payload (_type_): _description_
-
-        Raises:
-            Exception: _description_
+            pd_name (Str): Protection Domain NAme
 
         Returns:
-            _type_: _description_
+            (Bol) True: Success| false: Failed
         """
+
+        payload = {
+            "name": pd_name
+        }
+        api_url = self.base_url + f"/protection_domains/{pd_name}/activate"
+        response = self.s.post(
+            api_url, json.dumps(payload), verify=False).json()
+
+        return response
+
+    def get_pd_status(self, pd_name):
+        api_url = self.base_url + f"/protection_domains/?names={pd_name}"
+        response = self.s.get(api_url, verify=False).json()
+        
+        return response
+
+    def get_vm_uuid(self, vm_name):
         # todo
-        return
+        vm_uuid = ""
+        return vm_uuid
+    
+    def power_on_vm(self, host_uuid, vm_uuid):
+        payload = {
+            "host_uuid": host_uuid,
+            "transition": "ON",
+            "uuid": vm_uuid
+        }
+        api_url = self.base_url + f"/vms/{vm_uuid}/set_power_state/"
+        task = self.s.post(
+            api_url, json.dumps(payload), verify=False).json()
+
+        return task
+
+    def power_off_vm(self, host_uuid, vm_uuid):
+        payload = {
+            "host_uuid": host_uuid,
+            "transition": "OFF",
+            "uuid": vm_uuid
+        }
+        api_url = self.base_url + f"/vms/{vm_uuid}/set_power_state/"
+        task = self.s.post(
+            api_url, json.dumps(payload), verify=False).json()
+
+        return task
+
+    def get_vm_host_uuid(self, vm_name):
+        # todo
+        host_uuid = ""
+        vm_uuid = ""
+        return host_uuid, vm_uuid
+    
+    def mount_ngt_vm(self, host_uuid, vm_uuid):
+        payload = {
+            "operation": "MOUNT",
+            "override_guest": "true",
+            "uuid": vm_uuid
+        }
+        api_url = self.base_url + f"/vms/{vm_uuid}/manage_vm_guest_tools"
+        task = self.s.post(
+            api_url, json.dumps(payload), verify=False).json()
+
+        return task

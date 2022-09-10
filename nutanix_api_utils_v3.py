@@ -12,8 +12,9 @@ import urllib3
 
 # Utils class of API v3
 class NutanixRestapiUtils:
-    def __init__(self, username, password, base_url):
-        self.base_url = base_url
+    def __init__(self, username, password, prism_addr):
+        self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
+
         urllib3.disable_warnings()
 
         self.s = requests.Session()
