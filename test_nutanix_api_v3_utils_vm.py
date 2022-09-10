@@ -41,13 +41,13 @@ if __name__ == '__main__':
     with open(conf_file, "r") as f:
         conf = json.load(f)
 
-    prism_central_addr = conf["prism_central_address"]  # v3 API endpoint
-    prism_element_addr = conf["prism_element_address"]  # v2 API endpoint
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
+    prism_addr = conf["prism_central_address"]  # v3 API endpoint
+    # prism_addr = conf["prism_element_address"]  # v2 API endpoint
 
-    base_url = 'https://' + prism_central_addr + ':9440/api/nutanix/v3'
-    nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, base_url)
+    # base_url = 'https://' + prism_central_addr + ':9440/api/nutanix/v3'
+    nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
     test_mount_ngt(nutanix_api_v3, "DevWorkstation-2424")
 
