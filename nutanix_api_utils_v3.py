@@ -1,30 +1,33 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Utility class (mini SDK) of Nutanix Rest API v3
-#  (Work In Process)
-#  requirements: python 3.x, requsts
+"""Utility class of Nutanix Rest API v3
+(Work In Process)
+requirements: python 3.x, requsts
 """
 import json
 import requests
 import urllib3
 
 
-class Nutanix_restapi_mini_sdk:
+# Utils class of API v3
+class NutanixRestapiUtils:
     def __init__(self, username, password, base_url):
-
         self.base_url = base_url
-
         urllib3.disable_warnings()
 
         self.s = requests.Session()
         self.s.auth = (username, password)
-        self.s.headers.update({'Content-Type': 'application/json; charset=utf-8'})
+        self.s.headers.update(
+            {'Content-Type': 'application/json; charset=utf-8'})
 
 # region VM related SDKs
     def get_vm_uuid(self, payload):
+        """Get VM UUID by patload
+        """
         api_url = self.base_url + '/vms/list'
-        vms_spec = self.s.post(api_url, json.dumps(payload), verify=False).json()
+        vms_spec = self.s.post(
+            api_url, json.dumps(payload), verify=False).json()
         print("vms_spec ------")
         print(json.dumps(vms_spec, indent=2))
 
@@ -36,6 +39,9 @@ class Nutanix_restapi_mini_sdk:
         return vm_uuid
 
     def get_vm_uuid_by_name(self, vm_name):
+        """ Get VM UUID by VM Name
+        Note: unsupported filter is in use!
+        """
         payload = {
             "filter": "vm_name==.*" + vm_name + ".*",
             "kind": "vm"
@@ -43,6 +49,9 @@ class Nutanix_restapi_mini_sdk:
         return self.get_vm_uuid(payload)
 
     def get_vm_uuid_by_ip_address(self, ip_address):
+        """ Get VM UUID by VM IP address
+        Note: unsupported filter is in use!
+        """
         payload = {
             "filter": "ip_addresses==" + ip_address,
             "kind": "vm"
@@ -50,6 +59,8 @@ class Nutanix_restapi_mini_sdk:
         return self.get_vm_uuid(payload)
 
     def get_vm_spec(self, vm_uuid):
+        """ Get VM spec(Json) by VM UUID
+        """
         api_url = self.base_url + '/vms/' + vm_uuid
         vm_spec = self.s.get(api_url, verify=False).json()
         del vm_spec['status']
@@ -58,20 +69,23 @@ class Nutanix_restapi_mini_sdk:
         return vm_spec
 
     def update_vm(self, vm_uuid, vm_spec_json):
+        """ Get VM UUID by VM spec(Json)
+        """
         api_url = self.base_url + '/vms/' + vm_uuid
-        task = self.s.put(api_url, data=json.dumps(vm_spec_json), verify=False).json()
+        task = self.s.put(
+            api_url, data=json.dumps(vm_spec_json), verify=False).json()
         return task
 
     def delete_vm(self, vm_uuid):
+        """ Delete VM by VM UUID
+        """
         api_url = self.base_url + '/vms/' + vm_uuid
         task = self.s.delete(api_url, verify=False).json()
         return task
 
-    def restore_vm(self, vm_uuid, unix_timestamp):
-        # todo
-        return
-
     def quarantine_vm(self, vm_uuid, quarantine_method):
+        """ Quarentine VM by VM UUID
+        """
         vm_spec = self.get_vm_spec(vm_uuid)
         if quarantine_method not in ["Default", "Strict", "Forensics"]:
             raise Exception("Quarantine Method:" +
@@ -89,6 +103,8 @@ class Nutanix_restapi_mini_sdk:
         return task
 
     def unquarantine_vm(self, vm_uuid):
+        """ Unquarentine VM by VM UUID
+        """
         vm_spec = self.get_vm_spec(vm_uuid)
         del vm_spec['metadata']['categories']['Quarantine']
         del vm_spec['metadata']['last_update_time']
@@ -98,6 +114,8 @@ class Nutanix_restapi_mini_sdk:
         return task
 
     def mount_ngt_vm(self, vm_name):
+        """ Maount NGT by VM Name
+        """
         vm_uuid = self.get_vm_uuid_by_name(vm_name)
         print("vm_uuid: " + vm_uuid)
         vm_spec = self.get_vm_spec(vm_uuid)
@@ -116,15 +134,16 @@ class Nutanix_restapi_mini_sdk:
         print(vm_spec)
 
         task = self.update_vm(vm_uuid, vm_spec)
-        print("**************************")
         print(task)
-        return
+
+        return task
 # endregion
 
 # region Calm BP related SDKs
     def get_bp_uuid(self, target_bp_name):
-        # Get BP's UUID by BP name
-        # precondition: BP name is uniq
+        """Get BP's UUID by BP name
+        precondition: BP name is uniq
+        """
         api_url = self.base_url + "/blueprints/list"
         payload_dict = {
             "kind": "blueprint"
@@ -146,8 +165,10 @@ class Nutanix_restapi_mini_sdk:
         return bp_uuid
 
     def get_app_profile_uuid(self, bp_uuid):
-        # Get UUID of app profile by BP UUID
-        api_url = self.base_url + "/blueprints/" + bp_uuid + "/runtime_editables"
+        """# Get UUID of app profile by BP UUID
+        """
+        api_url = \
+            self.base_url + "/blueprints/" + bp_uuid + "/runtime_editables"
         response = self.s.get(api_url, verify=False)
 
         if not response.ok:
@@ -164,12 +185,14 @@ class Nutanix_restapi_mini_sdk:
         return app_profile_uuid
 
     def launch_bp(self, app_name, bp_uuid, app_profile_uuid):
-        # Launch BP
+        """Launch BP
+        """
         api_url = self.base_url + "/blueprints/" + bp_uuid + "/simple_launch"
         payload_dict = {
             "spec": {
                 "app_name": app_name,
-                "app_description": "Calm application launched via Nutanix Calm REST API",
+                "app_description":
+                    "Calm application launched via Nutanix Calm REST API",
                 "app_profile_reference": {
                     "kind": "app_profile",
                     "name": "Default",

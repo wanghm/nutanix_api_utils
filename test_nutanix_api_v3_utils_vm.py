@@ -6,7 +6,7 @@ requirements: python 3.x, requsts
 
 import sys
 import json
-from nutanix_api_v3_utils import Nutanix_restapi_mini_sdk
+from nutanix_api_utils_v3 import NutanixRestapiUtils
 
 
 def test_get_vm_uuid_by_ip_address(nutanix_api_v3, ip_address):
@@ -41,12 +41,13 @@ if __name__ == '__main__':
     with open(conf_file, "r") as f:
         conf = json.load(f)
 
-    prism_addr = conf["prism_central_address"]
+    prism_central_addr = conf["prism_central_address"]  # v3 API endpoint
+    prism_element_addr = conf["prism_element_address"]  # v2 API endpoint
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
 
-    base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
-    nutanix_api_v3 = Nutanix_restapi_mini_sdk(prism_user, prism_pass, base_url)
+    base_url = 'https://' + prism_central_addr + ':9440/api/nutanix/v3'
+    nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, base_url)
 
     test_mount_ngt(nutanix_api_v3, "DevWorkstation-2424")
 

@@ -7,7 +7,7 @@
 import sys
 import json
 import slackweb
-from nutanix_api_v3_utils import Nutanix_restapi_mini_sdk
+from nutanix_api_utils_v2 import Nutanix_restapi_mini_sdk
 
 
 def get_infected_vm_ips():
