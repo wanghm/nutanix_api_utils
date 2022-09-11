@@ -7,7 +7,7 @@
 import sys
 import json
 import slackweb
-from nutanix_api_utils_v2 import Nutanix_restapi_mini_sdk
+from nutanix_api_utils_v3 import NutanixRestapiUtils
 
 
 def get_infected_vm_ips():
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     slack_webhook_url = conf["slack_webhook_url"]
 
     base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
-    nutanix_api_v3 = Nutanix_restapi_mini_sdk(prism_user, prism_pass, base_url)
+    nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, base_url)
 
     slack = slackweb.Slack(url=slack_webhook_url)
 

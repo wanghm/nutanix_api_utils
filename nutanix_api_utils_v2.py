@@ -43,14 +43,9 @@ class NutanixRestapiUtils:
     def get_pd_status(self, pd_name):
         api_url = self.base_url + f"/protection_domains/?names={pd_name}"
         response = self.s.get(api_url, verify=False).json()
-        
+
         return response
 
-    def get_vm_uuid(self, vm_name):
-        # todo
-        vm_uuid = ""
-        return vm_uuid
-    
     def power_on_vm(self, host_uuid, vm_uuid):
         payload = {
             "host_uuid": host_uuid,
@@ -75,12 +70,36 @@ class NutanixRestapiUtils:
 
         return task
 
-    def get_vm_host_uuid(self, vm_name):
-        # todo
-        host_uuid = ""
-        vm_uuid = ""
-        return host_uuid, vm_uuid
+    def get_vm_spec(self, vm_name):
+        api_url = self.base_url + "/vms"
+        response = self.s.get(api_url, verify=False)
+
+        d = json.loads(response.text)
+
+        vms = d["entities"]
+        index = 0
+        vm_spec = ""
+
+        for vm in vms:
+            if vm_name == vm["name"]:
+                vm_uuid = vm["uuid"]
+                host_uuid = vm["host_uuid"]
+                print("vm_uuid=f{uuid}, host_uuid={host_uuid}")
+                vm_spec = vms[index]
+                break
+            index += 1
+        
+        print(vm_spec)
+        
+        return vm_spec
     
+    def get_vm_host_uuid(self, vm_name):
+        vm_spec = self.get_vm_spec(vm_name)
+        host_uuid = vm_spec["host_uuid"]
+        vm_uuid = vm_spec["uuid"]
+        
+        return host_uuid, vm_uuid
+
     def mount_ngt_vm(self, host_uuid, vm_uuid):
         payload = {
             "operation": "MOUNT",
@@ -88,7 +107,7 @@ class NutanixRestapiUtils:
             "uuid": vm_uuid
         }
         api_url = self.base_url + f"/vms/{vm_uuid}/manage_vm_guest_tools"
-        task = self.s.post(
-            api_url, json.dumps(payload), verify=False).json()
-
+        task = self.s.post(api_url, payload, verify=False)
+                
         return task
+        
