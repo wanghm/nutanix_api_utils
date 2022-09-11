@@ -1,16 +1,18 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Utility class of Nutanix Rest API v2
-(Work In Process)
-requirements: python 3.x, requsts
+"""nutanix_api_utils_v2.py
+~~~~~~~~~~~~~~~~~~~~~~
+
+Utility(Wrapper) class for Nutanix Rest API v2
+
+? 2022 Huimin Wang
 """
 import json
 import requests
 import urllib3
 
 
-# Utils class of API v2
 class NutanixRestapiUtils:
     def __init__(self, username, password, prism_addr):
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v2.0'
@@ -101,7 +103,9 @@ class NutanixRestapiUtils:
 
     def get_vm_host_uuid(self, vm_name):
         vm_spec = self.get_vm_spec(vm_name)
-        host_uuid = vm_spec.get("host_uuid")   # host_uuid is None if VM is Powered off
+
+        # host_uuid is None if VM is Powered off
+        host_uuid = vm_spec.get("host_uuid")
         vm_uuid = vm_spec.get("uuid")
 
         return host_uuid, vm_uuid
