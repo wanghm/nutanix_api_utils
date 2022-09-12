@@ -30,7 +30,9 @@ def test_delete_vm(nutanix_api_v3, vm_uuid):
 
 
 def test_mount_ngt(nutanix_api_v3, vm_name):
-    task = nutanix_api_v3.mount_ngt_vm(vm_name)
+    task = nutanix_api_v3.mount_ngt_vm(vm_name, 
+                                       ssr_enabled = True, 
+                                       vss_snapshot_enabled = True)
     print(task)
     return
 
