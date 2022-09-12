@@ -7,6 +7,7 @@
 import sys
 import json
 import slackweb
+sys.path.append('../')
 from nutanix_api_utils_v3 import NutanixRestapiUtils
 
 
