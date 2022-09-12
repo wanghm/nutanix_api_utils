@@ -1,10 +1,10 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-"""nutanix_api_utils_v2.py
+"""nutanix_api_utils_v3.py
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Utility(Wrapper) class for Nutanix Rest API v2
+Utility(Wrapper) class for Nutanix Rest API v3
 
 (c) 2022 Huimin Wang
 """
