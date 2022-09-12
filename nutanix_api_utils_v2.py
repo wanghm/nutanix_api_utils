@@ -115,13 +115,25 @@ class NutanixRestapiUtils:
         return host_uuid, vm_uuid
 
     def mount_ngt_vm(self, host_uuid, vm_uuid):
+        """this doesn't work
+        payload = {
+            "applications": {
+                "file_level_restore": "true",
+                "vss_snapshot": "true"
+            },
+            "operation": "MOUNT",
+            "override_guest": "true",
+            "uuid": vm_uuid
+        }
+        """
+
         payload = {
             "operation": "MOUNT",
             "override_guest": "true",
             "uuid": vm_uuid
         }
         api_url = self.base_url + f"/vms/{vm_uuid}/manage_vm_guest_tools"
-        # task = self.s.post(api_url, payload, verify=False)
+
         task = self.s.post(
             api_url, json.dumps(payload), verify=False).json()
 

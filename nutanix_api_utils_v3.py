@@ -9,6 +9,7 @@ Utility(Wrapper) class for Nutanix Rest API v3
 (c) 2022 Huimin Wang
 """
 import json
+from pickle import FALSE
 import requests
 import urllib3
 
@@ -116,7 +117,8 @@ class NutanixRestapiUtils:
         task = self.update_vm(vm_uuid, vm_spec)
         return task
 
-    def mount_ngt_vm(self, vm_name):
+    def mount_ngt_vm(self, vm_name, 
+                     ssr_enabled = False, vss_snapshot_enabled = False):
         """ Maount NGT by VM Name
         """
         vm_uuid = self.get_vm_uuid_by_name(vm_name)
@@ -128,9 +130,15 @@ class NutanixRestapiUtils:
                         "ngt_state": "UNINSTALLED",
                         "iso_mount_state": "MOUNTED",
                         "state": "ENABLED",
-                        "enabled_capability_list": []
+                        "enabled_capability_list": [
+                        ]
                     }
         }
+        if ssr_enabled: 
+            ngt_spec["nutanix_guest_tools"]["enabled_capability_list"].append("SELF_SERVICE_RESTORE")
+        if vss_snapshot_enabled: 
+            ngt_spec["nutanix_guest_tools"]["enabled_capability_list"].append("VSS_SNAPSHOT")
+        
 
         vm_spec["spec"]["resources"]["guest_tools"] = ngt_spec
 
