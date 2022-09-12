@@ -45,13 +45,11 @@ if __name__ == '__main__':
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
     prism_addr = conf["prism_central_address"]  # v3 API endpoint
-    # prism_addr = conf["prism_element_address"]  # v2 API endpoint
 
-    # base_url = 'https://' + prism_central_addr + ':9440/api/nutanix/v3'
     nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
     test_mount_ngt(nutanix_api_v3, "DevWorkstation-2424")
 
-    # test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-58f8d1269699")
-    # vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"hm-FILER")
+    # test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-xxxxxxxxxxxxx")
+    # vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"xxxxxxxx")
     # nutanix_api_v3.unquarantine_vm(vm_uuid)

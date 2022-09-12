@@ -28,8 +28,7 @@ if __name__ == '__main__':
     prism_pass = conf["password"]
     slack_webhook_url = conf["slack_webhook_url"]
 
-    base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
-    nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, base_url)
+    nutanix_api_v3 = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
     slack = slackweb.Slack(url=slack_webhook_url)
 
