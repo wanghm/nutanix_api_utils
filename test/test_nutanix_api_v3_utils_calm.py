@@ -4,9 +4,9 @@
 requirements: python 3.x, requsts
 """
 import sys
-import json
 sys.path.append('../')
 from nutanix_api_utils_v2 import NutanixRestapiUtils
+import json
 
 
 if __name__ == '__main__':
