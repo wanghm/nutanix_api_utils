@@ -37,6 +37,10 @@ def test_set_power_state_vm(nutanix_api, power_state, vm_name):
     print(task)
     return
 
+def test_get_pd_vms(nutanix_api, pd_name):
+    vms = nutanix_api.get_pd_vms(pd_name)
+    print(vms)
+    return
 
 if __name__ == '__main__':
     args = sys.argv
@@ -50,11 +54,10 @@ if __name__ == '__main__':
     # prism_addr = conf["prism_central_address"]  # v3 API endpoint
     prism_addr = conf["prism_element_address"]  # v2 API endpoint
 
-    # base_url = 'https://' + prism_central_addr + ':9440/api/nutanix/v3'
     nutanix_api = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
     # test_mount_ngt(nutanix_api, "DevWorkstation-2424")
-
     # test_take_snapshot_vm(nutanix_api, "snapshot_2222", "DevWorkstation-2424")
+    # test_set_power_state_vm(nutanix_api, "ON", "DevWorkstation-2424")
 
-    test_set_power_state_vm(nutanix_api, "ON", "DevWorkstation-2424")
+    test_get_pd_vms(nutanix_api, "secom-test2")

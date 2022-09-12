@@ -25,14 +25,7 @@ class NutanixRestapiUtils:
 
     def activate_pd(self, pd_name):
         """Activate protection domain (Unplanned failover)
-
-        Args:
-            pd_name (Str): Protection Domain NAme
-
-        Returns:
-            (Bol) True: Success| false: Failed
         """
-
         payload = {
             "name": pd_name
         }
@@ -41,6 +34,17 @@ class NutanixRestapiUtils:
             api_url, json.dumps(payload), verify=False).json()
 
         return response
+
+    def get_pd_vms(self, pd_name):
+        """get VM list in the PD
+        """
+        api_url = self.base_url + f"/protection_domains/{pd_name}"
+        response = self.s.get(api_url, verify=False).json()
+
+        vms = response.get("vms")
+        print(vms)
+
+        return vms
 
     def get_pd_status(self, pd_name):
         api_url = self.base_url + f"/protection_domains/?names={pd_name}"
