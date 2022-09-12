@@ -6,7 +6,7 @@
 
 Utility(Wrapper) class for Nutanix Rest API v2
 
-? 2022 Huimin Wang
+(c) 2022 Huimin Wang
 """
 import json
 import requests
