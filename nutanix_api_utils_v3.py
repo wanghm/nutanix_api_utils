@@ -1,16 +1,18 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Utility class of Nutanix Rest API v3
-(Work In Process)
-requirements: python 3.x, requsts
+"""nutanix_api_utils_v2.py
+~~~~~~~~~~~~~~~~~~~~~~
+
+Utility(Wrapper) class for Nutanix Rest API v2
+
+? 2022 Huimin Wang
 """
 import json
 import requests
 import urllib3
 
 
-# Utils class of API v3
 class NutanixRestapiUtils:
     def __init__(self, username, password, prism_addr):
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'

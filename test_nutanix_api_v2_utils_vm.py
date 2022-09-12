@@ -16,6 +16,7 @@ def test_mount_ngt(nutanix_api, vm_name):
     print(task)
     return
 
+
 def test_take_snapshot_vm(nutanix_api, snapshot_name, vm_name):
     host_uuid, vm_uuid = nutanix_api.get_vm_host_uuid(vm_name)
     print(f"vm_name={vm_name}. host_uuid={host_uuid}. vm_uuid={vm_uuid}")
@@ -24,6 +25,7 @@ def test_take_snapshot_vm(nutanix_api, snapshot_name, vm_name):
     print(task)
     return
 
+
 def test_set_power_state_vm(nutanix_api, power_state, vm_name):
     host_uuid, vm_uuid = nutanix_api.get_vm_host_uuid(vm_name)
     print(f"vm_name={vm_name}. host_uuid={host_uuid}. vm_uuid={vm_uuid}")
@@ -31,9 +33,10 @@ def test_set_power_state_vm(nutanix_api, power_state, vm_name):
         task = nutanix_api.power_on_vm(vm_uuid)
     else:
         task = nutanix_api.power_off_vm(host_uuid, vm_uuid)
-        
+
     print(task)
     return
+
 
 if __name__ == '__main__':
     args = sys.argv
