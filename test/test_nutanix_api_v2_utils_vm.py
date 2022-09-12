@@ -52,7 +52,6 @@ if __name__ == '__main__':
 
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
-    # prism_addr = conf["prism_central_address"]  # v3 API endpoint
     prism_addr = conf["prism_element_address"]  # v2 API endpoint
 
     nutanix_api = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
@@ -61,4 +60,4 @@ if __name__ == '__main__':
     # test_take_snapshot_vm(nutanix_api, "snapshot_2222", "DevWorkstation-2424")
     # test_set_power_state_vm(nutanix_api, "ON", "DevWorkstation-2424")
 
-    test_get_pd_vms(nutanix_api, "secom-test2")
+    test_get_pd_vms(nutanix_api, "test2")
