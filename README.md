@@ -1,4 +1,4 @@
-# nutanix restapi utility class (Wrapper class)
+# nutanix restapi utilities
 
 ## Nutanix Rest API Versions and Base URL
 
