@@ -34,10 +34,10 @@ https://{PrismElement}:9440/api/nutanix/v2/api_explorer/index.html
 ```
 
 ### import this class
-`from nutanix_api_v3_utils import NutanixRestapiUtils`    
+`from nutanix_api_utils_v3 import NutanixApiV3Client, RequestResponse`    
 `from nutanix_api_v2_utils import NutanixRestapiUtils`
 
 ### Run the test code (Samples)
  `cd test`    
- `python test_nutanix_api_v3_utils_vm.py ../auth.json`   
- `python test_nutanix_api_v2_utils_calm.py ../auth.json`
+ `python test_nutanix_api_v3_utils.py ../auth.json`   
+ `python test_nutanix_api_v3_utils_calm.py ../auth.json`
