@@ -13,6 +13,7 @@ import requests
 import urllib3
 import logging
 
+
 @dataclass
 class RequestResponse:
     """class to hold the response from the requests
@@ -22,6 +23,7 @@ class RequestResponse:
         self.message = ""
         self.json = ""
         self.details = ""
+
 
 class NutanixApiV3Client:
     """RestAPIClient class for Nutanix Rest API v3"""
@@ -76,7 +78,7 @@ class NutanixApiV3Client:
         """
         response = \
             self.send("POST", self.base_url + '/vms/list', payload)
-        
+
         vm_specs = response.json['entities']
 
         vm_uuid = ''
@@ -111,7 +113,7 @@ class NutanixApiV3Client:
         """
         response = self.send("GET", url=self.base_url + "/vms/" + vm_uuid)
         vm_spec = response.json
-        
+
         del vm_spec['status']
         # print(json.dumps(vm_spec, indent=2))
 
@@ -138,7 +140,7 @@ class NutanixApiV3Client:
         """
         vm_spec = self.get_vm_spec(vm_uuid)
         if quarantine_method not in ["Default", "Strict", "Forensics"]:
-            raise Exception("Quarantine Method:" +quarantine_method +
+            raise Exception("Quarantine Method:" + quarantine_method +
                             " is not valid. Valid values: Strict, Forensics")
         vm_spec['metadata']['categories']['Quarantine'] = quarantine_method
         del vm_spec['metadata']['last_update_time']
@@ -158,8 +160,8 @@ class NutanixApiV3Client:
         response = self.update_vm(vm_uuid, vm_spec)
         return response
 
-    def mount_ngt_vm(self, vm_name, 
-                     ssr_enabled = False, vss_snapshot_enabled = False):
+    def mount_ngt_vm(self, vm_name,
+                     ssr_enabled=False, vss_snapshot_enabled=False):
         """ Maount NGT by VM Name
         """
         vm_uuid = self.get_vm_uuid_by_name(vm_name)
@@ -175,11 +177,11 @@ class NutanixApiV3Client:
                         ]
                     }
         }
-        if ssr_enabled: 
+        if ssr_enabled:
             ngt_spec["nutanix_guest_tools"]["enabled_capability_list"].append("SELF_SERVICE_RESTORE")
-        if vss_snapshot_enabled: 
+        if vss_snapshot_enabled:
             ngt_spec["nutanix_guest_tools"]["enabled_capability_list"].append("VSS_SNAPSHOT")
-        
+
         vm_spec["spec"]["resources"]["guest_tools"] = ngt_spec
 
         print(vm_spec)
@@ -198,15 +200,14 @@ class NutanixApiV3Client:
 
         response = \
             self.send("POST", self.base_url + '/clusters/list', payload)
-        
+
         cluster_spec = None
-        cluster_uuid = ""
         clusters = response.json['entities']
-        
+
         for cluster_spec in clusters:
-             del cluster_spec["status"]
-             if cluster_spec['spec']['name'] == cluster_name:
-                 break
+            del cluster_spec["status"]
+            if cluster_spec['spec']['name'] == cluster_name:
+                break
 
         return cluster_spec
 
@@ -226,7 +227,7 @@ class NutanixApiV3Client:
 
         # update cluster_spec_json : change the ntp_servers
         cluster_spec["spec"]["resources"]["network"]["ntp_server_ip_list"] = ntp_servers
-        
+
         print(cluster_spec)
 
         response = \
