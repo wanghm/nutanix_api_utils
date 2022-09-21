@@ -72,7 +72,7 @@ class NutanixApiV3Client:
 
 # region VM related
     def get_vm_uuid(self, payload):
-        """Get VM UUID by patload
+        """Get VM UUID by payload
         """
         response = \
             self.send("POST", self.base_url + '/vms/list', payload)
