@@ -196,9 +196,6 @@ class NutanixApiV3Client:
         """
         payload = {"kind": "cluster"}
 
-        api_url = self.base_url + '/clusters/list'
-        print(api_url)
-
         response = \
             self.send("POST", self.base_url + '/clusters/list', payload)
         
