@@ -211,22 +211,22 @@ class NutanixApiV3Client:
              if cluster_spec['spec']['name'] == cluster_name:
                  break
 
-        cluster_uuid = cluster_spec['metadata']['uuid']
-        #del cluster_spec['metadata']
-
-        return cluster_spec, cluster_uuid
+        return cluster_spec
 
     def get_cluster_uuid(self, cluster_name):
         """ Get cluster UUID
         """
-        cluster_spec, cluster_uuid = self.get_cluster_spec(cluster_name)
+        cluster_spec = self.get_cluster_spec(cluster_name)
+        cluster_uuid = cluster_spec['metadata']['uuid']
 
         return cluster_uuid
 
     def update_cluster_ntp(self, cluster_name, ntp_servers):
         """ Update cluster: NTP servers
         """
-        cluster_spec, cluster_uuid = self.get_cluster_spec(cluster_name)
+        cluster_spec = self.get_cluster_spec(cluster_name)
+        cluster_uuid = cluster_spec['metadata']['uuid']
+
         # update cluster_spec_json : change the ntp_servers
         cluster_spec["spec"]["resources"]["network"]["ntp_server_ip_list"] = ntp_servers
         
