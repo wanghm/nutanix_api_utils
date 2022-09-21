@@ -28,6 +28,12 @@ class RequestResponse:
 class NutanixApiV3Client:
     """RestAPIClient class for Nutanix Rest API v3"""
     def __init__(self, username, password, prism_addr):
+        """Class constructor
+        Args:
+            username (str): username
+            password (str): password
+            prism_addr (str): IP of DNS namwe of API Endpont(V3=Prism Element)
+        """
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
         urllib3.disable_warnings()
 
@@ -39,7 +45,16 @@ class NutanixApiV3Client:
         self.logger = logging.getLogger(__name__)
 
     def send(self, method, url, payload=None):
-        """Send request"""
+        """Send the request to the API endpoint
+        Args:
+            method(str): HTTP method
+            url(str): URL of the API endpoint
+            payload(str): payload of the request
+        Returns:
+            RequestResponse: response from the API endpoint
+        Exceptions:
+            Exception: if the response code is not 200
+        """
         response = RequestResponse()
         try:
             if method == "GET":
@@ -74,7 +89,11 @@ class NutanixApiV3Client:
 
 # region VM related
     def get_vm_uuid(self, payload):
-        """Get VM UUID by payload
+        """Get VM UUID by paylod (in V3 API get VM API uses POST method)
+        Args:
+            payload (dict): payload of the request
+        returns:
+            str: VM UUID
         """
         response = \
             self.send("POST", self.base_url + '/vms/list', payload)
@@ -91,6 +110,10 @@ class NutanixApiV3Client:
     def get_vm_uuid_by_name(self, vm_name):
         """ Get VM UUID by VM Name
         Note: unsupported filter is in use!
+        Args:
+            vm_name (str): VM name
+        Returns:
+            str: VM UUID
         """
         payload = {
             "filter": "vm_name==.*" + vm_name + ".*",
@@ -101,6 +124,10 @@ class NutanixApiV3Client:
     def get_vm_uuid_by_ip_address(self, ip_address):
         """ Get VM UUID by VM IP address
         Note: unsupported filter is in use!
+        Args:
+            ip_address (str): VM IP address
+        returns:
+            str: VM UUID
         """
         payload = {
             "filter": "ip_addresses==" + ip_address,
@@ -110,17 +137,25 @@ class NutanixApiV3Client:
 
     def get_vm_spec(self, vm_uuid):
         """ Get VM spec(Json) by VM UUID
+        Args:
+            vm_uuid (str): VM UUID
+        Returns:
+            dict: VM spec(Json)
         """
         response = self.send("GET", url=self.base_url + "/vms/" + vm_uuid)
         vm_spec = response.json
 
         del vm_spec['status']
-        # print(json.dumps(vm_spec, indent=2))
 
         return vm_spec
 
     def update_vm(self, vm_uuid, vm_spec_json):
         """ Get VM UUID by VM spec(Json)
+        Args:
+            vm_uuid (str): VM UUID
+            vm_spec_json (dict): VM spec(Json)
+        Returns:
+            RequestResponse: response from the API endpoint
         """
         response = \
             self.send("PUT", self.base_url + '/vms/' + vm_uuid, vm_spec_json)
@@ -129,6 +164,10 @@ class NutanixApiV3Client:
 
     def delete_vm(self, vm_uuid):
         """ Delete VM by VM UUID
+        Args:
+            vm_uuid (str): VM UUID
+        Returns:
+            RequestResponse: response from the API endpoint
         """
         response = \
             self.send("DELETE", self.base_url + '/vms/' + vm_uuid)
@@ -137,6 +176,11 @@ class NutanixApiV3Client:
 
     def quarantine_vm(self, vm_uuid, quarantine_method):
         """ Quarentine VM by VM UUID
+        Args:
+            vm_uuid (str): VM UUID
+            quarantine_method (str): "Strict" or "Forensics"
+        returns:
+            RequestResponse: response from the API endpoint
         """
         vm_spec = self.get_vm_spec(vm_uuid)
         if quarantine_method not in ["Default", "Strict", "Forensics"]:
@@ -151,6 +195,10 @@ class NutanixApiV3Client:
 
     def unquarantine_vm(self, vm_uuid):
         """ Unquarentine VM by VM UUID
+        Args:
+            vm_uuid (str): VM UUID
+        Returns:
+            RequestResponse: response from the API endpoint  
         """
         vm_spec = self.get_vm_spec(vm_uuid)
         del vm_spec['metadata']['categories']['Quarantine']
@@ -163,6 +211,12 @@ class NutanixApiV3Client:
     def mount_ngt_vm(self, vm_name,
                      ssr_enabled=False, vss_snapshot_enabled=False):
         """ Maount NGT by VM Name
+        Args:
+            vm_name (str): VM name
+            ssr_enabled (bool): SSR enabled
+            vss_snapshot_enabled (bool): VSS snapshot enabled
+        Returns:
+            RequestResponse: response from the API endpoint
         """
         vm_uuid = self.get_vm_uuid_by_name(vm_name)
         print("vm_uuid: " + vm_uuid)
@@ -195,6 +249,10 @@ class NutanixApiV3Client:
 # region cluster related
     def get_cluster_spec(self, cluster_name):
         """ Get cluster spec
+        Args:
+            cluster_name (str): cluster name
+        Returns:
+            dict: cluster spec
         """
         payload = {"kind": "cluster"}
 
@@ -213,6 +271,10 @@ class NutanixApiV3Client:
 
     def get_cluster_uuid(self, cluster_name):
         """ Get cluster UUID
+        Args:
+            cluster_name (str): cluster name
+        Returns:
+            str: cluster UUID
         """
         cluster_spec = self.get_cluster_spec(cluster_name)
         cluster_uuid = cluster_spec['metadata']['uuid']
@@ -221,6 +283,11 @@ class NutanixApiV3Client:
 
     def update_cluster_ntp(self, cluster_name, ntp_servers):
         """ Update cluster: NTP servers
+        Args:
+            cluster_name (str): cluster name
+            ntp_servers (list): NTP servers
+        Returns:
+            RequestResponse: response from the API endpoint
         """
         cluster_spec = self.get_cluster_spec(cluster_name)
         cluster_uuid = cluster_spec['metadata']['uuid']
@@ -240,6 +307,10 @@ class NutanixApiV3Client:
 # region Calm BP related
     def get_bp_uuid(self, target_bp_name):
         """Get BP's UUID by BP name
+        Args:
+            target_bp_name (str): BP name
+        Returns:
+            str: BP UUID
         """
         payload = {
             "kind": "blueprint"
@@ -259,7 +330,11 @@ class NutanixApiV3Client:
         return bp_uuid
 
     def get_app_profile_uuid(self, bp_uuid):
-        """# Get UUID of app profile by BP UUID
+        """ Get UUID of app profile by BP UUID
+        Args:
+            bp_uuid (str): BP UUID
+        Returns:
+            str: app profile UUID
         """
         response = \
             self.send("GET", self.base_url + "/blueprints/" + bp_uuid + "/runtime_editables")
@@ -274,6 +349,12 @@ class NutanixApiV3Client:
 
     def launch_bp(self, app_name, bp_uuid, app_profile_uuid):
         """Launch BP
+        Args:
+            app_name (str): app name
+            bp_uuid (str): BP UUID
+            app_profile_uuid (str): app profile UUID
+        Returns:
+            RequestResponse: response from the API endpoint
         """
         api_url = self.base_url + "/blueprints/" + bp_uuid + "/simple_launch"
         payload = {
