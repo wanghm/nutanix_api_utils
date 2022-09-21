@@ -24,7 +24,7 @@ class RequestResponse:
         self.details = ""
 
 class NutanixApiV3Client:
-    """Utility class for Nutanix Rest API v2"""
+    """RestAPIClient class for Nutanix Rest API v3"""
     def __init__(self, username, password, prism_addr):
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
         urllib3.disable_warnings()
