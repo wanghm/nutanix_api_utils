@@ -45,6 +45,12 @@ def test_get_pd_vms(nutanix_api, pd_name):
     return
 
 
+def activate_pd(nutanix_api, pd_name):
+    task = nutanix_api.activate_pd(pd_name)
+    print(task)
+    return
+
+
 if __name__ == '__main__':
     args = sys.argv
     conf_file = args[1]
@@ -58,7 +64,9 @@ if __name__ == '__main__':
 
     nutanix_api = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
-    test_mount_ngt(nutanix_api, "DevWorkstation-2424")
+    # activate_pd(nutanix_api, "secom-test-new")
+    
+    # test_mount_ngt(nutanix_api, "DevWorkstation-2424")
     # test_take_snapshot_vm(nutanix_api, "snapshot_2222", "DevWorkstation-2424")
     # test_set_power_state_vm(nutanix_api, "ON", "DevWorkstation-2424")
 
