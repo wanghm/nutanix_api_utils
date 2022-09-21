@@ -31,7 +31,7 @@ def test_delete_vm(nutanix_api_v3, vm_uuid):
 
 def test_mount_ngt(nutanix_api_v3, vm_name):
     response = nutanix_api_v3.mount_ngt_vm(vm_name,
-                ssr_enabled=True, vss_snapshot_enabled=True)
+            ssr_enabled=True, vss_snapshot_enabled=True)
     print(response.json)
 
     return response.json
@@ -43,6 +43,7 @@ def test_get_cluster_uuid(nutanix_api_v3, cluster_name):
     print("cluster_uuid: " + cluster_uuid)
 
     return cluster_uuid
+
 
 def test_update_cluster_ntp(nutanix_api_v3, cluster_name, ntp_servers):
     response = nutanix_api_v3.update_cluster_ntp(cluster_name, ntp_servers)
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     prism_addr = conf["prism_central_address"]  # v3 API endpoint
 
     nutanix_api_v3 = NutanixApiV3Client(prism_user, prism_pass, prism_addr)
-    
+
     test_get_cluster_uuid(nutanix_api_v3, "SGDCNXRXC04")
     ntp_servers = ["0.sg.pool.ntp.org", "1.sg.pool.ntp.org"]
     test_update_cluster_ntp(nutanix_api_v3, "SGDCNXRXC04", ntp_servers)
@@ -71,5 +72,5 @@ if __name__ == '__main__':
     # test_mount_ngt(nutanix_api_v3, "RHEL84-IP63")
 
     # test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-xxxxxxxxxxxxx")
-    vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3,"RHEL84-IP62-2")
+    vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3, "RHEL84-IP62-2")
     nutanix_api_v3.quarantine_vm(vm_uuid, "Strict")
