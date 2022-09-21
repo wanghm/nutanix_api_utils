@@ -24,7 +24,7 @@ class RequestResponse:
         self.details = ""
 
 class NutanixApiV3Client:
-    """Utility class for Nutanix Rest API v2"""
+    """RestAPIClient class for Nutanix Rest API v3"""
     def __init__(self, username, password, prism_addr):
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
         urllib3.disable_warnings()
@@ -195,9 +195,6 @@ class NutanixApiV3Client:
         """ Get cluster spec
         """
         payload = {"kind": "cluster"}
-
-        api_url = self.base_url + '/clusters/list'
-        print(api_url)
 
         response = \
             self.send("POST", self.base_url + '/clusters/list', payload)
