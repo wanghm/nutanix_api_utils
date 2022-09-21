@@ -109,11 +109,12 @@ class NutanixApiV3Client:
 
     def get_vm_uuid_by_name(self, vm_name):
         """ Get VM UUID by VM Name
-        Note: unsupported filter is in use!
         Args:
             vm_name (str): VM name
         Returns:
             str: VM UUID
+        Note:
+            Unsupported filter is in use!
         """
         payload = {
             "filter": "vm_name==.*" + vm_name + ".*",
@@ -123,11 +124,12 @@ class NutanixApiV3Client:
 
     def get_vm_uuid_by_ip_address(self, ip_address):
         """ Get VM UUID by VM IP address
-        Note: unsupported filter is in use!
         Args:
             ip_address (str): VM IP address
         returns:
             str: VM UUID
+        Note:
+            Unsupported filter is in use!
         """
         payload = {
             "filter": "ip_addresses==" + ip_address,
@@ -198,7 +200,7 @@ class NutanixApiV3Client:
         Args:
             vm_uuid (str): VM UUID
         Returns:
-            RequestResponse: response from the API endpoint  
+            RequestResponse: response from the API endpoint
         """
         vm_spec = self.get_vm_spec(vm_uuid)
         del vm_spec['metadata']['categories']['Quarantine']
