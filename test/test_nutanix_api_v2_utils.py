@@ -1,5 +1,4 @@
 #!/bin/env python
-# -*- coding: utf-8 -*-
 """Test code of Nutanxi restapi v2 mini SDKs
 requirements: python 3.x, requsts
 """

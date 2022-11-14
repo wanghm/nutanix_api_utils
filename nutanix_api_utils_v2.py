@@ -1,6 +1,4 @@
 #!/bin/env python
-# -*- coding: utf-8 -*-
-
 """nutanix_api_utils_v2.py
 ~~~~~~~~~~~~~~~~~~~~~~
 
