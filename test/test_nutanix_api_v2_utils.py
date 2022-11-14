@@ -1,5 +1,5 @@
 #!/bin/env python
-"""Test code of Nutanxi restapi v2 mini SDKs
+"""Test code of Nutanxi restapi v2 utility
 requirements: python 3.x, requsts
 """
 
