@@ -31,7 +31,7 @@ class NutanixApiV3Client:
         Args:
             username (str): username
             password (str): password
-            prism_addr (str): IP of DNS namwe of API Endpont(V3=Prism Element)
+            prism_addr (str): IP of DNS namwe of API Endpont(V3=Prism Central)
         """
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v3'
         urllib3.disable_warnings()
