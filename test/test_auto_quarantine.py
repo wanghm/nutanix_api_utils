@@ -1,5 +1,4 @@
 #!/bin/env python
-# -*- coding: utf-8 -*-
 
 # (1) Get (virus)infected VMs from security center (by API)
 # (2) Retieve VM UUID
