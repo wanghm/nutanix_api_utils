@@ -1,0 +1,67 @@
+CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:/C=US/ST=CA/L=San Jose/O=Nutanix Inc./OU=Manageability/CN=*.nutanix.local
+   i:/C=US/ST=CA/L=San Jose/O=Nutanix Inc./OU=Manageability/CN=*.nutanix.local
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDcDCCAligAwIBAgIIFyIr5He0vpEwDQYJKoZIhvcNAQELBQAwdjELMAkGA1UE
+BhMCVVMxCzAJBgNVBAgTAkNBMREwDwYDVQQHEwhTYW4gSm9zZTEVMBMGA1UEChMM
+TnV0YW5peCBJbmMuMRYwFAYDVQQLEw1NYW5hZ2VhYmlsaXR5MRgwFgYDVQQDDA8q
+Lm51dGFuaXgubG9jYWwwHhcNMjIxMDI4MDc0NDMyWhcNMzIxMDI4MDc0NDMyWjB2
+MQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExETAPBgNVBAcTCFNhbiBKb3NlMRUw
+EwYDVQQKEwxOdXRhbml4IEluYy4xFjAUBgNVBAsTDU1hbmFnZWFiaWxpdHkxGDAW
+BgNVBAMMDyoubnV0YW5peC5sb2NhbDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBANKk64xUr7uda2vgPbB1yPi3NrqujlLlrMjDXQqxXB6jR1+F8mmDKL1Q
+AP4V+Qe5O9r2k12VF7SI39vPFQWp70fjfe9JikY1gtH3pFea0IVOrCRAQHsGotUz
++ZeEtZ9Kk9Ucm+Yel5DbVFUMDh756Mb84Obxe6D4mkPPR5/UcBxShp2q+d1Zjdnv
+KMU6lGedwbUIXTbY9JJ/Diwe3jnZ762oo8TCPhqdWt4zuKwdDQsNqUNe426sdE83
+AbiqcGYP+qKqNoQkaxskX5FTcYOl5SBEi/YcKnJYkHWyRc/chyH842KA+2DgUaxs
+bCi9FmskES/0/gL0MaYW/+eEywI+GLkCAwEAAaMCMAAwDQYJKoZIhvcNAQELBQAD
+ggEBADvnnEuSrIlReGRKoIevDB/+Ig87Ri/FpdGcRsQCpntEXWqNY0XCIHPDqMhy
+Y0wAgRUjCJinukh+tF6/ESJtEjdH/gVaGkcC+DTzrUVbQd1+qmxbHAcHiHiX6vvx
+Qyk07qMMFf2Wh3fk7n0jluxfbKdGnBYkZKQPwABNnOdNFMS0ECPeQnhAbf1AoZs+
+mNwjozUmp/6KJMl5304TOhCOMKMVIBG0oaKDA8V9aYWLPpv9jR4GUy1JnAP3AUef
+chYfpN3mmeBPFRNCcvNzhNkDL86eShn3jEYA+QdqbV6t9SOwsWD8FLct+T3aD94R
+uB0csRAaDiQJhRI0TMccUBbTewc=
+-----END CERTIFICATE-----
+subject=/C=US/ST=CA/L=San Jose/O=Nutanix Inc./OU=Manageability/CN=*.nutanix.local
+issuer=/C=US/ST=CA/L=San Jose/O=Nutanix Inc./OU=Manageability/CN=*.nutanix.local
+---
+No client certificate CA names sent
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 1568 bytes and written 322 bytes
+---
+New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES256-GCM-SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES256-GCM-SHA384
+    Session-ID: CD7560CCC286047AC94E638051B2919A5C6B2575F7AF9E66F98F9B144C2DA796
+    Session-ID-ctx: 
+    Master-Key: 52131773287136CCDAE55B5811D269052E55874CB1E02996FB57898BD2A86EEC5FB120F54759151CBEE8908A9C5682D8
+    TLS session ticket lifetime hint: 7200 (seconds)
+    TLS session ticket:
+    0000 - c2 eb 59 16 f5 4f f4 37-5d 4e 8f 43 5a 00 7b 08   ..Y..O.7]N.CZ.{.
+    0010 - e2 f7 fe 48 df 52 5e 8a-97 29 b4 c8 51 a0 a6 d5   ...H.R^..)..Q...
+    0020 - 11 b9 3c d5 6a a6 59 fa-57 bc 1e 98 cd 7e f5 35   ..<.j.Y.W....~.5
+    0030 - 1d 76 2a a4 3b 1a 59 8e-0c d7 aa ab 5d 23 d6 2f   .v*.;.Y.....]#./
+    0040 - b2 ec 4c cb 03 d6 ea d6-ff b4 fa 4d cf eb 1e 9d   ..L........M....
+    0050 - 6a a8 c8 bf 99 1d 8d 5d-8b 4d c6 39 da e0 9c 89   j......].M.9....
+    0060 - 36 0a 1c 63 68 38 7b 43-88 ed 35 c3 85 e6 eb 0c   6..ch8{C..5.....
+    0070 - 52 33 30 32 d6 b0 1f 10-1c 59 7e 4f 3a 05 29 c8   R302.....Y~O:.).
+    0080 - 20 5e e4 74 66 fe 6c 8b-de 49 1a 1c 85 6c dd 8d    ^.tf.l..I...l..
+    0090 - 24 fd 87 dc fd 07 fc 19-88 15 4e 2e a3 e5 e0 4c   $.........N....L
+    00a0 - 6d 57 05 b2 0a 86 b4 17-5e 6e b7 d0 74 c0 d0 ba   mW......^n..t...
+    00b0 - 3e 6e 9d b3 a0 e8 1e df-11 cd 40 ef 2f 26 70 c9   >n........@./&p.
+
+    Start Time: 1667194617
+    Timeout   : 7200 (sec)
+    Verify return code: 18 (self signed certificate)
+---

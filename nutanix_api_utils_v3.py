@@ -102,7 +102,7 @@ class NutanixApiV3Client:
 
         vm_uuid = ''
         for vm in vm_specs:
-            if vm['metadata']:  # sometimes this value will be '{}'
+            if vm['metadata']:
                 vm_uuid = vm['metadata']['uuid']
                 break  # return the 1st one
         return vm_uuid
