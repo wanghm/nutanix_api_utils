@@ -65,12 +65,12 @@ if __name__ == '__main__':
     nutanix_api_v3 = NutanixApiV3Client(prism_user, prism_pass, prism_addr)
     nutanix_api_v3.power_on_vm("CentOS VM")
 
-    # test_get_cluster_uuid(nutanix_api_v3, "SGDCNXRXC04")
-    # ntp_servers = ["0.sg.pool.ntp.org", "1.sg.pool.ntp.org"]
-    # test_update_cluster_ntp(nutanix_api_v3, "SGDCNXRXC04", ntp_servers)
+    # test_get_cluster_uuid(nutanix_api_v3, "xxxxxxxx")
+    # ntp_servers = ["0.pool.ntp.org", "1.pool.ntp.org"]
+    # test_update_cluster_ntp(nutanix_api_v3, "xxxxxxxx", ntp_servers)
 
     # test_mount_ngt(nutanix_api_v3, "RHEL84-IP63")
 
     # test_delete_vm(nutanix_api_v3, "7e82b365-570d-4a53-ae41-xxxxxxxxxxxxx")
-    # vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3, "RHEL84-IP62-2")
+    # vm_uuid = test_get_vm_uuid_by_name(nutanix_api_v3, "xxxx-IP62-2")
     # nutanix_api_v3.quarantine_vm(vm_uuid, "Strict")
