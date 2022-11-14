@@ -238,7 +238,7 @@ class NutanixApiV3Client:
         if vss_snapshot_enabled:
             ngt_spec["nutanix_guest_tools"]["enabled_capability_list"].append("VSS_SNAPSHOT")
 
-        vm_spec["spec"]["resources"]["power_state"] = "ngt_spec"
+        vm_spec["spec"]["resources"]["guest_tools"] = ngt_spec
 
         print(vm_spec)
 
