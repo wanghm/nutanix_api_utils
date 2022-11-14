@@ -238,8 +238,32 @@ class NutanixApiV3Client:
         if vss_snapshot_enabled:
             ngt_spec["nutanix_guest_tools"]["enabled_capability_list"].append("VSS_SNAPSHOT")
 
-        vm_spec["spec"]["resources"]["guest_tools"] = ngt_spec
+        vm_spec["spec"]["resources"]["power_state"] = "ngt_spec"
 
+        print(vm_spec)
+
+        response = self.update_vm(vm_uuid, vm_spec)
+        print(response.json)
+
+        return response
+
+    def power_on_vm(self, vm_name):
+        vm_uuid = self.get_vm_uuid_by_name(vm_name)
+        print("vm_uuid: " + vm_uuid)
+        vm_spec = self.get_vm_spec(vm_uuid)
+        vm_spec["spec"]["resources"]["power_state"] = "ON"
+        print(vm_spec)
+
+        response = self.update_vm(vm_uuid, vm_spec)
+        print(response.json)
+
+        return response
+        
+    def power_off_vm(self, vm_name):
+        vm_uuid = self.get_vm_uuid_by_name(vm_name)
+        print("vm_uuid: " + vm_uuid)
+        vm_spec = self.get_vm_spec(vm_uuid)
+        vm_spec["spec"]["resources"]["power_state"] = "OFF"
         print(vm_spec)
 
         response = self.update_vm(vm_uuid, vm_spec)
