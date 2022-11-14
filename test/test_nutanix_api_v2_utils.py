@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     nutanix_api = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
-    # activate_pd(nutanix_api, "secom-test-new")
+    activate_pd(nutanix_api, "secom-test-pd-1")
 
     # test_mount_ngt(nutanix_api, "DevWorkstation-2424")
     # test_take_snapshot_vm(nutanix_api, "snapshot_2222", "DevWorkstation-2424")
