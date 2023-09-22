@@ -9,7 +9,8 @@ Utility(Wrapper) class for Nutanix Rest API v2
 import json
 import requests
 import urllib3
-
+import datetime
+import time
 
 class NutanixRestapiUtils:
     def __init__(self, username, password, prism_addr):
@@ -155,3 +156,51 @@ class NutanixRestapiUtils:
         print(task)
 
         return task
+    
+    def generate_image_config(img_name, img_annotation, dev_bus, dev_index, vmdisk_uuid):
+        return {
+            'annotation': img_annotation,
+            'image_type': 'DISK_IMAGE',
+            'name': img_name,
+            'vm_disk_clone_spec': {
+                'disk_address': {
+                    'device_bus': dev_bus,
+                    'device_index': dev_index,
+                    'vmdisk_uuid': vmdisk_uuid
+                }
+            }
+        }
+
+    def create_image_from_vm_disks(self, vm_name, img_name):
+        """Create disk images from VM
+
+        """
+        src_vm = self.get_vm_spec(vm_name)
+        img_vm_name = src_vm['name']
+        # img_vm_uuid = src_vm['uuid']
+
+        img_timestamp = datetime.datetime.now()
+        img_timestamp_str = img_timestamp.strftime('%Y%m%d%H%M%S')
+        img_timestamp_annotation = img_timestamp.strftime('%Y/%m/%d %H:%M:%S')
+    
+        for vdisk in src_vm['vm_disk_info']:
+            if vdisk['disk_address']['device_bus'] == 'scsi':
+                img_disk_label = vdisk['disk_address']['disk_label']
+                img_disk_bus = vdisk['disk_address']['device_bus']
+                img_disk_index = vdisk['disk_address']['device_index']
+                img_vmdisk_uuid = vdisk['disk_address']['vmdisk_uuid']
+
+                if img_name == "":
+                    img_name = '_'.join([img_vm_name, img_disk_label, img_timestamp_str])
+            
+                image_config = self.generate_image_config(
+                    img_name, img_timestamp_annotation, img_disk_bus, img_disk_index, img_vmdisk_uuid)
+            
+                api_url = self.base_url + "/images"
+                task = self.s.post(
+                    api_url, json.dumps(image_config), verify=False).json()
+
+                print("task info returned in take_snapshot_vm:")
+                print(task)
+        return
+    
