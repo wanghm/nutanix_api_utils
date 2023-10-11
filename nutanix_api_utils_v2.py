@@ -257,7 +257,7 @@ class NutanixRestapiUtils:
         return '\r\n'.join(body), content_type
 
     def import_prism_ssl_certificate(self, key_filename, cert_filename, cacert_filename):
-        """Regenerate self-signed SSL certificate for Prism
+        """Import custom SSL certificate to Prism
 
         """
         api_url = self.base_url_v1 + "/keys/pem/import"
