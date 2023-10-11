@@ -2,7 +2,7 @@
 """nutanix_api_utils_v2.py
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Utility(Wrapper) class for Nutanix Rest API v2
+Utility(Wrapper) class for Nutanix Rest API v2.0, v1
 
 (c) 2022 Huimin Wang
 """
@@ -11,10 +11,15 @@ import requests
 import urllib3
 import datetime
 import time
+import binascii
+import random
+import string
+from requests_toolbelt.utils import dump
 
 class NutanixRestapiUtils:
     def __init__(self, username, password, prism_addr):
         self.base_url = 'https://' + prism_addr + ':9440/api/nutanix/v2.0'
+        self.base_url_v1 = 'https://' + prism_addr + ':9440//PrismGateway/services/rest/v1'
         urllib3.disable_warnings()
 
         self.s = requests.Session()
@@ -204,3 +209,69 @@ class NutanixRestapiUtils:
                 print(task)
         return
     
+    def regenerate_prism_ssl_certificate(self):
+        """Regenerate self-signed SSL certificate for Prism
+
+        """
+        api_url = self.base_url_v1 + "/keys/pem"
+        payload = {
+            "keyType":"RSA_2048",
+             "key":"",
+             "cert":"",
+             "caChain":""
+        }
+
+        task = self.s.post(
+            api_url, json.dumps(payload), verify=False).json()
+
+        print(task)
+        return task
+
+    def encode_multipart_formdata(self, fields, files):
+        boundary = '----WebKitFormBoundary' + ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
+        body = []
+
+        for key, value in fields.items():
+            body.extend([
+                '--' + boundary,
+                'Content-Disposition: form-data; name="{}"'.format(key),
+                '',
+                value
+            ])
+
+        for key, value in files.items():
+            filename, file_contents, content_type = value
+            if isinstance(file_contents, bytes):
+                file_contents = file_contents.decode('utf-8')
+            body.extend([
+                '--' + boundary,
+                'Content-Disposition: form-data; name="{}"; filename="{}"'.format(key, filename),
+                'Content-Type: {}'.format(content_type),
+                '',
+                file_contents
+            ])
+
+        body.extend(['--{}--'.format(boundary), ''])
+        content_type = 'multipart/form-data; boundary={}'.format(boundary)
+
+        return '\r\n'.join(body), content_type
+
+    def import_prism_ssl_certificate(self, key_filename, cert_filename, cacert_filename):
+        """Regenerate self-signed SSL certificate for Prism
+
+        """
+        api_url = self.base_url_v1 + "/keys/pem/import"
+
+        fields = {'keyType': 'RSA_2048'}
+        files = {'key': ('key.pem', open(key_filename, 'rb').read(), 'application/x-x509-ca-cert'),
+                'cert': ('crt.pem', open(cert_filename, 'rb').read(), 'application/x-x509-ca-cert'),
+                'caChain': ('cacert.pem', open(cacert_filename, 'rb').read(), 'application/x-x509-ca-cert')
+                }
+
+        data, content_type = self.encode_multipart_formdata(fields, files)
+        headers = {'Content-Type': content_type}
+
+        response = self.s.post(api_url, headers=headers, data=data, verify=False)
+        #print(response.text)
+        print(dump.dump_all(response).decode("utf-8"))
+
