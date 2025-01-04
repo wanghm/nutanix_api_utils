@@ -4,7 +4,7 @@ requirements: python 3.x, requsts
 """
 import sys
 sys.path.append('../')
-from nutanix_api_utils_v3 import NutanixRestapiUtils
+from nutanix_api_utils_v3 import NutanixApiV3Client, RequestResponse
 import json
 
 
