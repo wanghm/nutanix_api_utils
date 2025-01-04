@@ -4,7 +4,7 @@ requirements: python 3.x, requsts
 """
 import sys
 sys.path.append('../')
-from nutanix_api_utils_v2 import NutanixRestapiUtils
+from nutanix_api_utils_v3 import NutanixRestapiUtils
 import json
 
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     prism_user = conf["user_name"]
     prism_pass = conf["password"]
-    prism_addr = conf["prism_element_address"]  # v2 API endpoint
+    prism_addr = conf["prism_central_address"]  # v3 API endpoint
 
     nutanix_api = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
 
