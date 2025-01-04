@@ -19,7 +19,7 @@ if __name__ == '__main__':
     prism_pass = conf["password"]
     prism_addr = conf["prism_central_address"]  # v3 API endpoint
 
-    nutanix_api = NutanixRestapiUtils(prism_user, prism_pass, prism_addr)
+    nutanix_api = NutanixApiV3Client(prism_user, prism_pass, prism_addr)
 
     bp_name = "test1"
     app_name = "test1-app1"
